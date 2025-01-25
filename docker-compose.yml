@@ -1,0 +1,31 @@
+services:
+  app:
+    image: app
+    container_name: container-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_URL: ${DB_URL_DOCKER}
+      DB_USERNAME: ${DB_USERNAME_DOCKER}
+      DB_PASSWORD: ${DB_PASSWORD_DOCKER}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  db:
+    image: mysql
+    container_name: container-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_DOCKER}
+      MYSQL_DATABASE: ${DB_DATABASE_DOCKER}
+      MYSQL_USER: ${DB_USERNAME_DOCKER}
+      MYSQL_PASSWORD: ${DB_PASSWORD_DOCKER}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
